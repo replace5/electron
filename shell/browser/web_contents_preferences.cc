@@ -128,7 +128,6 @@ WebContentsPreferences::WebContentsPreferences(
   SetDefaultBoolIfUndefined(options::kSandbox, false);
   SetDefaultBoolIfUndefined(options::kNativeWindowOpen, false);
   SetDefaultBoolIfUndefined(options::kContextIsolation, true);
-  SetDefaultBoolIfUndefined(options::kWorldSafeExecuteJavaScript, true);
   SetDefaultBoolIfUndefined(options::kJavaScript, true);
   SetDefaultBoolIfUndefined(options::kImages, true);
   SetDefaultBoolIfUndefined(options::kTextAreasAreResizable, true);
@@ -421,9 +420,6 @@ void WebContentsPreferences::OverrideWebkitPrefs(
 
   // Run Electron APIs and preload script in isolated world
   prefs->context_isolation = IsEnabled(options::kContextIsolation, true);
-
-  prefs->world_safe_execute_javascript =
-      IsEnabled(options::kWorldSafeExecuteJavaScript, true);
 
   int guest_instance_id = 0;
   if (GetAsInteger(&preference_, options::kGuestInstanceID, &guest_instance_id))

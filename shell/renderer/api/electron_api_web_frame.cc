@@ -152,10 +152,8 @@ class ScriptExecutionCallback : public blink::WebScriptExecutionCallback {
 
   explicit ScriptExecutionCallback(
       gin_helper::Promise<v8::Local<v8::Value>> promise,
-      bool world_safe_result,
       CompletionCallback callback)
       : promise_(std::move(promise)),
-        world_safe_result_(world_safe_result),
         callback_(std::move(callback)) {}
 
   ~ScriptExecutionCallback() override = default;
@@ -213,7 +211,6 @@ class ScriptExecutionCallback : public blink::WebScriptExecutionCallback {
         // the same world as the caller or the result is not an object and
         // therefore does not have a prototype chain to protect
         bool should_clone_value =
-            world_safe_result_ &&
             !(value->IsObject() &&
               promise_.GetContext() ==
                   value.As<v8::Object>()->CreationContext()) &&
@@ -261,7 +258,6 @@ class ScriptExecutionCallback : public blink::WebScriptExecutionCallback {
 
  private:
   gin_helper::Promise<v8::Local<v8::Value>> promise_;
-  bool world_safe_result_;
   CompletionCallback callback_;
 
   DISALLOW_COPY_AND_ASSIGN(ScriptExecutionCallback);
@@ -427,8 +423,6 @@ v8::Local<v8::Value> GetWebPreference(v8::Isolate* isolate,
     return gin::ConvertToV8(isolate, prefs.opener_id);
   } else if (pref_name == options::kContextIsolation) {
     return gin::ConvertToV8(isolate, prefs.context_isolation);
-  } else if (pref_name == options::kWorldSafeExecuteJavaScript) {
-    return gin::ConvertToV8(isolate, prefs.world_safe_execute_javascript);
   } else if (pref_name == options::kGuestInstanceID) {
     // NOTE: guestInstanceId is internal-only.
     return gin::ConvertToV8(isolate, prefs.guest_instance_id);
@@ -649,7 +643,6 @@ v8::Local<v8::Promise> ExecuteJavaScript(gin_helper::Arguments* args,
       blink::WebScriptSource(blink::WebString::FromUTF16(code)),
       has_user_gesture,
       new ScriptExecutionCallback(std::move(promise),
-                                  prefs.world_safe_execute_javascript,
                                   std::move(completion_callback)));
 
   return handle;
@@ -715,7 +708,6 @@ v8::Local<v8::Promise> ExecuteJavaScriptInIsolatedWorld(
       world_id, &sources.front(), sources.size(), has_user_gesture,
       scriptExecutionType,
       new ScriptExecutionCallback(std::move(promise),
-                                  prefs.world_safe_execute_javascript,
                                   std::move(completion_callback)));
 
   return handle;

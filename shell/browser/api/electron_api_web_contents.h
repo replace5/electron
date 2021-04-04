@@ -164,6 +164,8 @@ class WebContents : public gin::Wrappable<WebContents>,
 
   bool GetBackgroundThrottling() const;
   void SetBackgroundThrottling(bool allowed);
+  bool GetVisibilityState() const;
+  void SetVisibilityState(bool allowed);
   int GetProcessID() const;
   base::ProcessId GetOSProcessID() const;
   Type GetType() const;
@@ -721,6 +723,8 @@ class WebContents : public gin::Wrappable<WebContents>,
 
   // Whether background throttling is disabled.
   bool background_throttling_ = true;
+
+  bool visibility_state_ = true;
 
   // Whether to enable devtools.
   bool enable_devtools_ = true;

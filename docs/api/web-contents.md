@@ -1942,6 +1942,16 @@ when the page becomes backgrounded. This also affects the Page Visibility API.
 Controls whether or not this WebContents will throttle animations and timers
 when the page becomes backgrounded. This also affects the Page Visibility API.
 
+#### `contents.getVisibilityState()`
+
+Returns `Boolean` - whether or not this WebContents is visibily.
+
+#### `contents.setVisibilityState(allowed)`
+
+* `is_visible` Boolean
+
+Controls this WebContents shown or hidden.
+
 #### `contents.getType()`
 
 Returns `String` - the type of the webContent. Can be `backgroundPage`, `window`, `browserView`, `remote`, `webview` or `offscreen`.
@@ -2007,6 +2017,10 @@ A [`Debugger`](debugger.md) instance for this webContents.
 
 A `Boolean` property that determines whether or not this WebContents will throttle animations and timers
 when the page becomes backgrounded. This also affects the Page Visibility API.
+
+#### `contents.visibilityState`
+
+A `Boolean` property that determines whether or not this WebContents is visibily.
 
 #### `contents.mainFrame` _Readonly_
 

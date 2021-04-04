@@ -47,7 +47,9 @@ export const syncMethods = new Set([
   'getZoomFactor',
   'getZoomLevel',
   'setZoomFactor',
-  'setZoomLevel'
+  'setZoomLevel',
+  'getVisibilityState',
+  'setVisibilityState'
 ]);
 
 export const properties = new Set([
@@ -55,7 +57,8 @@ export const properties = new Set([
   'userAgent',
   'zoomLevel',
   'zoomFactor',
-  'frameRate'
+  'frameRate',
+  'visibilityState'
 ]);
 
 export const asyncMethods = new Set([

@@ -678,6 +678,8 @@ WebContents::WebContents(v8::Isolate* isolate,
   // Read options.
   options.Get("backgroundThrottling", &background_throttling_);
 
+  options.Get("visibilityState", &visibility_state_);
+
   // Get type
   options.Get("type", &type_);
 
@@ -1929,6 +1931,37 @@ void WebContents::SetBackgroundThrottling(bool allowed) {
 
   if (rwh_impl->is_hidden()) {
     rwh_impl->WasShown({});
+    visibility_state_ = true;
+  }
+}
+
+bool WebContents::GetVisibilityState() const {
+  return visibility_state_;
+}
+
+void WebContents::SetVisibilityState(bool is_visible) {
+  visibility_state_ = is_visible;
+  auto* rfh = web_contents()->GetMainFrame();
+  if (!rfh)
+    return;
+
+  auto* rwhv = rfh->GetView();
+  if (!rwhv)
+    return;
+
+  auto* rwh_impl =
+      static_cast<content::RenderWidgetHostImpl*>(rwhv->GetRenderWidgetHost());
+  if (!rwh_impl)
+    return;
+
+  if (is_visible) {
+    if (rwh_impl->is_hidden()) {
+      rwh_impl->WasShown({});
+    } 
+  } else {
+    if (!rwh_impl->disable_hidden_ && !rwh_impl->is_hidden()) {
+      rwh_impl->WasHidden();
+    }
   }
 }
 
@@ -3567,6 +3600,10 @@ v8::Local<v8::ObjectTemplate> WebContents::FillObjectTemplate(
                  &WebContents::GetBackgroundThrottling)
       .SetMethod("setBackgroundThrottling",
                  &WebContents::SetBackgroundThrottling)
+      .SetMethod("getVisibilityState",
+                 &WebContents::GetVisibilityState)
+      .SetMethod("setVisibilityState",
+                 &WebContents::SetVisibilityState)
       .SetMethod("getProcessId", &WebContents::GetProcessID)
       .SetMethod("getOSProcessId", &WebContents::GetOSProcessID)
       .SetMethod("equal", &WebContents::Equal)

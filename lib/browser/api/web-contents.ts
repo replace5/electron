@@ -726,6 +726,11 @@ WebContents.prototype._init = function () {
     get: () => this.getBackgroundThrottling(),
     set: (allowed) => this.setBackgroundThrottling(allowed)
   });
+
+  Object.defineProperty(this, 'visibilityState', {
+    get: () => this.getVisibilityState(),
+    set: (allowed) => this.setVisibilityState(allowed)
+  });
 };
 
 // Public APIs.

@@ -1939,29 +1939,12 @@ bool WebContents::GetVisibilityState() const {
   return visibility_state_;
 }
 
-void WebContents::SetVisibilityState(bool is_visible) {
-  visibility_state_ = is_visible;
-  auto* rfh = web_contents()->GetMainFrame();
-  if (!rfh)
-    return;
-
-  auto* rwhv = rfh->GetView();
-  if (!rwhv)
-    return;
-
-  auto* rwh_impl =
-      static_cast<content::RenderWidgetHostImpl*>(rwhv->GetRenderWidgetHost());
-  if (!rwh_impl)
-    return;
-
-  if (is_visible) {
-    if (rwh_impl->is_hidden()) {
-      rwh_impl->WasShown({});
-    } 
+void WebContents::SetVisibilityState(bool visibility) {
+  visibility_state_ = visibility;
+  if (visibility) {
+    web_contents()->WasShown();
   } else {
-    if (!rwh_impl->disable_hidden_ && !rwh_impl->is_hidden()) {
-      rwh_impl->WasHidden();
-    }
+    web_contents()->WasHidden();
   }
 }
 

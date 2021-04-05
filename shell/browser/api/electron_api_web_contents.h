@@ -165,7 +165,7 @@ class WebContents : public gin::Wrappable<WebContents>,
   bool GetBackgroundThrottling() const;
   void SetBackgroundThrottling(bool allowed);
   bool GetVisibilityState() const;
-  void SetVisibilityState(bool allowed);
+  void SetVisibilityState(bool visibility);
   int GetProcessID() const;
   base::ProcessId GetOSProcessID() const;
   Type GetType() const;

@@ -1947,9 +1947,9 @@ when the page becomes backgrounded. This also affects the Page Visibility API.
 
 Returns `Boolean` - whether or not this WebContents is visibily.
 
-#### `contents.setVisibilityState(allowed)`
+#### `contents.setVisibilityState(visibility)`
 
-* `is_visible` Boolean
+* `visibility` Boolean
 
 Controls this WebContents shown or hidden.
 
